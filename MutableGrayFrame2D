@@ -1,0 +1,108 @@
+package a3adept;
+
+public class MutableGrayFrame2D implements GrayFrame2D {
+	private int width;
+	private int height;
+	private GrayPixel[][] gray_pixel;
+	private double intensity=0.0;
+
+	public MutableGrayFrame2D (int width, int height){
+		checkWidthHeight(width,height);
+		this.width=width;
+		this.height=height;
+		gray_pixel=new GrayPixel[width][height];
+		for (int x=0; x<getWidth(); x++) 
+			for (int y=0; y<getHeight(); y++) {
+				gray_pixel[x][y]= new GrayPixel(intensity);
+			}
+	}
+
+	public int getWidth() {
+		return width;
+	}
+
+	public int getHeight() {
+		return height;
+	}
+
+	public Pixel getPixel(int x, int y) {
+		checkCoordinates(x,y);
+		return (Pixel) gray_pixel[x][y];
+	}
+
+	public Frame2D setPixel(int x, int y, Pixel p) {
+		checkCoordinates(x,y);
+		if (p == null) {
+			throw new RuntimeException("Pixel is null");
+		}
+		gray_pixel[x][y]=(GrayPixel) p;
+		return this;
+	}
+
+	public GrayPixel getGrayPixel(int x, int y) {
+		checkCoordinates(x,y);
+		return gray_pixel[x][y];
+	}
+
+	public GrayFrame2D setGrayPixel(int x, int y, GrayPixel p) {
+		checkCoordinates(x,y);
+		if (p == null) {
+			throw new RuntimeException("GrayPixel is null");
+		}
+		gray_pixel[x][y]=p;
+		return this;
+	}
+	//convert the Pixel argument provided to 
+	//a GrayPixel of equivalent intensity
+
+	public Frame2D lighten(double factor) {
+		checkFactor(factor);
+		for(int i=0;i<this.height;i++)
+			for(int j=0;j<this.width;j++){
+				gray_pixel[j][i].lighten(factor);
+			}
+		return this;
+	}
+	//apply the lighten operation to all pixel values
+
+	public Frame2D darken(double factor) {
+		checkFactor(factor);
+		for(int i=0;i<this.height;i++)
+			for(int j=0;j<this.width;j++){
+				gray_pixel[j][i].darken(factor);
+			}
+		return this;
+	}
+	//apply the darken operation to all pixel values
+
+	public GrayFrame2D toGrayFrame() {
+		return this;
+	}
+	//produce a GrayFrame2D object with the equivalent intensities.
+	//return itself
+
+	private void checkCoordinates(int x, int y) {
+		if (x < 0 || x >= getWidth()) {
+			throw new RuntimeException("value " + x + "for x is out of bounds");
+		}
+		if (y < 0 || y >= getHeight()) {
+			throw new RuntimeException("value " + y + "for y is out of bounds");
+		}
+	}
+
+	private void checkFactor(double x) {
+		if (x < 0.0 || x >1.0) {
+			//The factor should be a value from 0.0 to 1.0
+			throw new RuntimeException("value " + x + "for factor is out of bounds");
+		}
+	}
+
+	private void checkWidthHeight(int x,int y){
+		if(x<0){
+			throw new RuntimeException("value " + x + "for x is out of bounds");
+		}
+		if(y<0){
+			throw new RuntimeException("value " + y + "for y is out of bounds");
+		}
+	}
+}
