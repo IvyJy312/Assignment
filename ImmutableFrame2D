@@ -1,0 +1,81 @@
+package a3jedi;
+
+public class ImmutableFrame2D implements Frame2D {
+	private int width;
+	private int height;
+	private Pixel[] pixelArray;
+
+	public ImmutableFrame2D(int width, int height, Pixel[] pixels){
+		checkWidthHeight(width,height);
+		this.width=width;
+		this.height=height;
+		this.pixelArray=pixels.clone();
+
+	}
+
+	public int getWidth() {
+		return width;
+	}
+
+	public int getHeight() {
+		return height;
+	}
+
+
+	public Pixel getPixel(int x, int y) {
+		checkCoordinates(x,y);
+		return pixelArray [x+(y*width)];
+	}
+
+	public Frame2D setPixel(int x, int y, Pixel p) {
+		int loc = x + y * width;
+		pixelArray [loc]=p;
+		return this;
+	}
+
+	public Frame2D lighten(double factor) {
+		checkFactor(factor);
+		for(int i=0;i<pixelArray.length;i++){
+			pixelArray[i].lighten(factor);
+		}
+
+		return this;
+	}
+
+	public Frame2D darken(double factor) {
+		checkFactor(factor);
+		for(int i=0;i<width*height;i++){
+			pixelArray[i].darken(factor);
+		}
+
+		return this;
+	}
+	//?
+	public GrayFrame2D toGrayFrame() {
+		return null;
+	}
+	private void checkCoordinates(int x, int y) {
+		if (x < 0 || x >= getWidth()) {
+			throw new RuntimeException("value " + x + "for x is out of bounds");
+		}
+		if (y < 0 || y >= getHeight()) {
+			throw new RuntimeException("value " + y + "for y is out of bounds");
+		}
+	}
+
+	private void checkFactor(double h) {
+		if (h < 0.0 || h >1.0) {
+			//The factor should be a value from 0.0 to 1.0
+			throw new RuntimeException("value " + h + "for factor is out of bounds");
+		}
+	}
+
+	private void checkWidthHeight(int x,int y){
+		if(x<0){
+			throw new RuntimeException("value " + x + "for x is out of bounds");
+		}
+		if(y<0){
+			throw new RuntimeException("value " + y + "for y is out of bounds");
+		}
+	}
+}
