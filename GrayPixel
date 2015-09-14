@@ -1,0 +1,70 @@
+package a3jedi;
+
+import a3jedi.Pixel;
+
+public class GrayPixel implements Pixel {
+	private double intensity;
+	private double red;
+	private double green;
+	private double blue;
+
+	public GrayPixel(double intensity){
+		checkIntensity(intensity);
+		this.red=intensity;
+		this.green=intensity;
+		this.blue=intensity;
+		//red, green, and blue components are always the same
+		//represent only a grayscale pixel value
+	}
+
+	public double getRed() {
+		return red;
+	}
+
+	public double getGreen() {		
+		return green;
+	}
+
+	public double getBlue() {
+		return blue;
+	}
+
+	public double getIntensity() {
+		intensity = 0.2126 * red + 0.7152 * green + 0.0722 * blue;
+		return intensity;
+	}
+
+	public Pixel lighten(double factor) {
+		checkFactor(factor);
+		// check factor whether is out of bounds 
+		this.red=red*(1.0-factor)+factor;
+		this.green=green*(1.0-factor)+factor;
+		this.blue=blue*(1.0-factor)+factor;
+		return this;
+	}
+
+	public Pixel darken(double factor) {
+		checkFactor(factor);
+		// check factor whether is out of bounds 
+		this.red=red*(1.0-factor);
+		this.green=green*(1.0-factor);
+		this.blue=blue*(1.0-factor);
+		return this;
+	}
+
+	private void checkFactor(double x) {
+		if (x < 0.0 || x >1.0) {
+			//The factor should be a value from 0.0 to 1.0
+			throw new RuntimeException("value " + x + "for factor is out of bounds");
+		}
+	}
+	private void checkIntensity(double intensity) {
+		//check whether it is out of bounds
+		// validate parameter values
+		if (intensity < 0.0 || intensity >1.0) {
+			throw new RuntimeException("value " + intensity + "for intensity is out of bounds");
+		}
+
+	}
+
+}
