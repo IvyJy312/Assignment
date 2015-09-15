@@ -11,10 +11,8 @@ public class MutableFrame2D implements Frame2D {
 		checkWidthHeight(width,height);
 		this.width=width;
 		this.height=height;
-		pixel = new Pixel[width][height];
-
-		for (int x=0; x<getWidth(); x++) 
-			for (int y=0; y<getHeight(); y++) {
+		for (int y=0; y<getHeight(); y++) 
+			for (int x=0; x<getWidth(); x++) {
 				pixel[x][y] = new ColorPixel(INIT_PIXEL_INTENSITY,INIT_PIXEL_INTENSITY,INIT_PIXEL_INTENSITY);
 				//initial black
 			}
@@ -38,7 +36,7 @@ public class MutableFrame2D implements Frame2D {
 		if (p == null) {
 			throw new RuntimeException("Pixel is null");
 		}
-		pixel [x][y]=p;
+		pixel [x][y]=(ColorPixel) p;
 		return this;
 	}
 	// change the value of object itself
@@ -51,7 +49,7 @@ public class MutableFrame2D implements Frame2D {
 		checkFactor(factor);
 		for(int i=0;i<this.height;i++)
 			for(int j=0;j<this.width;j++){
-				pixel[j][i].lighten(factor);
+				this.setPixel(j,i,pixel[j][i].lighten(factor));
 			}
 		return this;
 	}
@@ -61,7 +59,7 @@ public class MutableFrame2D implements Frame2D {
 		checkFactor(factor);
 		for(int i=0;i<this.height;i++)
 			for(int j=0;j<this.width;j++){
-				pixel[j][i].darken(factor);
+				this.setPixel(j,i,pixel[j][i].darken(factor));
 			}
 		return this;
 	}
@@ -69,10 +67,12 @@ public class MutableFrame2D implements Frame2D {
 
 	public GrayFrame2D toGrayFrame() {
 		GrayFrame2D gray_Frame=new MutableGrayFrame2D(this.width,this.height);
+
 		for (int i=0;i<this.height;i++)
 			for (int j=0;j<this.width;j++)
 			{
-				gray_Frame.setGrayPixel(j,i,(GrayPixel)pixel[j][i]);
+				GrayPixel intensity = new GrayPixel(pixel[j][i].getIntensity());
+				gray_Frame.setGrayPixel(j, i, intensity);
 			}
 		return gray_Frame;
 	}
@@ -95,10 +95,10 @@ public class MutableFrame2D implements Frame2D {
 	}
 
 	private void checkWidthHeight(int x,int y){
-		if(x<0){
+		if(x<=0){
 			throw new RuntimeException("value " + x + "for x is out of bounds");
 		}
-		if(y<0){
+		if(y<=0){
 			throw new RuntimeException("value " + y + "for y is out of bounds");
 		}
 	}
