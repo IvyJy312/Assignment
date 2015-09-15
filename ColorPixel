@@ -31,21 +31,24 @@ public class ColorPixel implements Pixel {
 
 	public Pixel lighten(double factor) {
 		checkFactor(factor);
-		this.red=red*(1.0-factor)+factor;
-		this.green=green*(1.0-factor)+factor;
-		this.blue=blue*(1.0-factor)+factor;
-		checkColor(red, green, blue);
-		return this;
+		double lig_red =red*(1.0-factor)+factor;
+		double lig_green=green*(1.0-factor)+factor;
+		double lig_blue=blue*(1.0-factor)+factor;
+		checkColor(lig_red, lig_green, lig_blue);
+		ColorPixel lig_pixel= new ColorPixel(lig_red,lig_green,lig_blue);
+		return lig_pixel;
 	}
 
 	public Pixel darken(double factor) {
 		checkFactor(factor);
-		this.red=red*(1.0-factor);
-		this.green=green*(1.0-factor);
-		this.blue=blue*(1.0-factor);
-		checkColor(red, green, blue);
-		return this;
+		double dark_red = red*(1.0-factor);
+		double dark_green=green*(1.0-factor);
+		double dark_blue=blue*(1.0-factor);
+		checkColor(dark_red, dark_green, dark_blue);
+	    ColorPixel dark_pixel = new ColorPixel(dark_red,dark_green,dark_blue);
+		return dark_pixel;
 	}
+	
 	private void checkColor(double red, double green, double blue) {
 		//check whether it is out of bounds
 		// validate parameter values
