@@ -3,16 +3,15 @@ package a3adept;
 public class MutableGrayFrame2D implements GrayFrame2D {
 	private int width;
 	private int height;
-	private GrayPixel[][] gray_pixel;
+	private Pixel[][] gray_pixel;
 	private double intensity=0.0;
 
 	public MutableGrayFrame2D (int width, int height){
 		checkWidthHeight(width,height);
 		this.width=width;
 		this.height=height;
-		gray_pixel=new GrayPixel[width][height];
-		for (int x=0; x<getWidth(); x++) 
-			for (int y=0; y<getHeight(); y++) {
+		for (int y=0; y<getHeight(); y++) 
+			for (int x=0; x<getWidth(); x++) {
 				gray_pixel[x][y]= new GrayPixel(intensity);
 			}
 	}
@@ -41,7 +40,7 @@ public class MutableGrayFrame2D implements GrayFrame2D {
 
 	public GrayPixel getGrayPixel(int x, int y) {
 		checkCoordinates(x,y);
-		return gray_pixel[x][y];
+		return (GrayPixel) gray_pixel[x][y];
 	}
 
 	public GrayFrame2D setGrayPixel(int x, int y, GrayPixel p) {
@@ -59,17 +58,16 @@ public class MutableGrayFrame2D implements GrayFrame2D {
 		checkFactor(factor);
 		for(int i=0;i<this.height;i++)
 			for(int j=0;j<this.width;j++){
-				gray_pixel[j][i].lighten(factor);
+				this.setPixel(j,i,gray_pixel[j][i].lighten(factor));
 			}
 		return this;
 	}
 	//apply the lighten operation to all pixel values
 
 	public Frame2D darken(double factor) {
-		checkFactor(factor);
 		for(int i=0;i<this.height;i++)
 			for(int j=0;j<this.width;j++){
-				gray_pixel[j][i].darken(factor);
+				this.setPixel(j,i,gray_pixel[j][i].darken(factor));
 			}
 		return this;
 	}
