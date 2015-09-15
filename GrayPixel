@@ -37,19 +37,17 @@ public class GrayPixel implements Pixel {
 	public Pixel lighten(double factor) {
 		checkFactor(factor);
 		// check factor whether is out of bounds 
-		this.red=red*(1.0-factor)+factor;
-		this.green=green*(1.0-factor)+factor;
-		this.blue=blue*(1.0-factor)+factor;
-		return this;
+		double lig_intensity=getIntensity()*(1.0-factor)+factor;
+		Pixel lig_pixel=new GrayPixel(lig_intensity);
+		return lig_pixel;
 	}
 
 	public Pixel darken(double factor) {
 		checkFactor(factor);
 		// check factor whether is out of bounds 
-		this.red=red*(1.0-factor);
-		this.green=green*(1.0-factor);
-		this.blue=blue*(1.0-factor);
-		return this;
+		double dark_intensity=getIntensity()*(1.0-factor);
+		Pixel dark_pixel=new GrayPixel(dark_intensity);
+		return dark_pixel;
 	}
 
 	private void checkFactor(double x) {
