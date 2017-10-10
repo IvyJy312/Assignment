@@ -1,0 +1,71 @@
+package a3adept;
+
+public class ColorPixel implements Pixel {
+	private double red;
+	private double green;
+	private double blue;
+
+	public ColorPixel(double red, double green, double blue){
+		checkColor(red, green, blue);
+		this.red=red;
+		this.green=green;
+		this.blue=blue;
+	}
+
+	public double getRed() {
+		return red;
+	}
+
+	public double getGreen() {
+		return green;
+	}
+
+	public double getBlue() {
+		return blue;
+	}
+
+	public double getIntensity() {
+		double intensity = 0.2126 * red + 0.7152 * green + 0.0722 * blue;
+		return intensity;
+	}
+
+	public Pixel lighten(double factor) {
+		checkFactor(factor);
+		double lig_red =red*(1.0-factor)+factor;
+		double lig_green=green*(1.0-factor)+factor;
+		double lig_blue=blue*(1.0-factor)+factor;
+		checkColor(lig_red, lig_green, lig_blue);
+		ColorPixel lig_pixel= new ColorPixel(lig_red,lig_green,lig_blue);
+		return lig_pixel;
+	}
+
+	public Pixel darken(double factor) {
+		checkFactor(factor);
+		double dark_red = red*(1.0-factor);
+		double dark_green=green*(1.0-factor);
+		double dark_blue=blue*(1.0-factor);
+		checkColor(dark_red, dark_green, dark_blue);
+	    ColorPixel dark_pixel = new ColorPixel(dark_red,dark_green,dark_blue);
+		return dark_pixel;
+	}
+	
+	private void checkColor(double red, double green, double blue) {
+		//check whether it is out of bounds
+		// validate parameter values
+		if (red < 0.0 || red >1.0) {
+			throw new RuntimeException("value " + red + "for red is out of bounds");
+		}
+		if (green < 0.0 || green >1.0) {
+			throw new RuntimeException("value " + green + "for green is out of bounds");
+		}
+		if (blue < 0.0 || blue >1.0) {
+			throw new RuntimeException("value " + blue + "for blue is out of bounds");
+		}
+	}
+	private void checkFactor(double x) {
+		if (x < 0.0 || x >1.0) {
+			//The factor should be a value from 0.0 to 1.0
+			throw new RuntimeException("value " + x + "for factor is out of bounds");
+		}
+	}
+}

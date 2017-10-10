@@ -1,0 +1,107 @@
+package a3adept;
+
+public class MutableFrame2D implements Frame2D {
+	private static final double INIT_PIXEL_INTENSITY = 0.0;
+	private int width;
+	private int height;
+	private Pixel[][] pixel;
+
+
+	public MutableFrame2D (int width, int height){
+		checkWidthHeight(width,height);
+		this.width=width;
+		this.height=height;
+		for (int y=0; y<getHeight(); y++) 
+			for (int x=0; x<getWidth(); x++) {
+				pixel[x][y] = new ColorPixel(INIT_PIXEL_INTENSITY,INIT_PIXEL_INTENSITY,INIT_PIXEL_INTENSITY);
+				//initial black
+			}
+	}
+
+	public int getWidth() {
+		return width;
+	}
+
+	public int getHeight() {
+		return height;
+	}
+	// as getters for the frame dimensions 
+	public Pixel getPixel(int x, int y) {
+		checkCoordinates(x,y);
+		return pixel[x][y];
+	}
+	//returns the pixel at the specified (x,y) position
+	public Frame2D setPixel(int x, int y, Pixel p) {
+		checkCoordinates(x,y);
+		if (p == null) {
+			throw new RuntimeException("Pixel is null");
+		}
+		pixel [x][y]=(ColorPixel) p;
+		return this;
+	}
+	// change the value of object itself
+	//set the pixel at the specified (x,y) position 
+	//to the Pixel object passed in 
+	//as the third parameter p
+
+
+	public Frame2D lighten(double factor) {
+		checkFactor(factor);
+		for(int i=0;i<this.height;i++)
+			for(int j=0;j<this.width;j++){
+				this.setPixel(j,i,pixel[j][i].lighten(factor));
+			}
+		return this;
+	}
+	//apply the lighten operation to all pixel values
+
+	public Frame2D darken(double factor) {
+		checkFactor(factor);
+		for(int i=0;i<this.height;i++)
+			for(int j=0;j<this.width;j++){
+				this.setPixel(j,i,pixel[j][i].darken(factor));
+			}
+		return this;
+	}
+	//apply the darken operation to all pixel values
+
+	public GrayFrame2D toGrayFrame() {
+		GrayFrame2D gray_Frame=new MutableGrayFrame2D(this.width,this.height);
+
+		for (int i=0;i<this.height;i++)
+			for (int j=0;j<this.width;j++)
+			{
+				GrayPixel intensity = new GrayPixel(pixel[j][i].getIntensity());
+				gray_Frame.setGrayPixel(j, i, intensity);
+			}
+		return gray_Frame;
+	}
+	//produce a GrayFrame2D object with the equivalent intensities.
+	//need to create a GrayFrame2D object
+
+	private void checkCoordinates(int x, int y) {
+		if (x < 0 || x >= getWidth()) {
+			throw new RuntimeException("value " + x + "for x is out of bounds");
+		}
+		if (y < 0 || y >= getHeight()) {
+			throw new RuntimeException("value " + y + "for y is out of bounds");
+		}
+	}
+	private void checkFactor(double x) {
+		if (x < 0.0 || x >1.0) {
+			//The factor should be a value from 0.0 to 1.0
+			throw new RuntimeException("value " + x + "for factor is out of bounds");
+		}
+	}
+
+	private void checkWidthHeight(int x,int y){
+		if(x<=0){
+			throw new RuntimeException("value " + x + "for x is out of bounds");
+		}
+		if(y<=0){
+			throw new RuntimeException("value " + y + "for y is out of bounds");
+		}
+	}
+}
+
+
